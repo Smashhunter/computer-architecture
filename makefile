@@ -19,6 +19,16 @@ run: $(IMG)
 hex: $(IMG)
 	hexdump -C $(IMG)
 
+debug: $(IMG)
+	$(QEMU) -drive format=raw,file=$(IMG) -s -S
+
+gdb:
+	gdb -ex "target remote localhost:1234" \
+	    -ex "architecture i8086" \
+	    -ex "set disassembly-flavor intel" \
+	    -ex "b *0x7c00" \
+	    -ex "c"
+
 # Очистка созданных файлов
 clean:
 	rm -f $(IMG)
