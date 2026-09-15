@@ -50,13 +50,13 @@ void sse_ikj(const int64_t* A, const int64_t* B, int64_t* C) {
             __m128i r_vec = _mm_set1_epi64x(A[i * N + k]);
             
             for (int j = 0; j < N; j += 2) {
-                __m128i b_vec = _mm_loadu_si128(reinterpret_cast<const __m128i*>(&B[k * N + j]));
-                __m128i c_vec = _mm_loadu_si128(reinterpret_cast<const __m128i*>(&C[i * N + j]));
+                __m128i b_vec = _mm_load_si128(reinterpret_cast<const __m128i*>(&B[k * N + j]));
+                __m128i c_vec = _mm_load_si128(reinterpret_cast<const __m128i*>(&C[i * N + j]));
                 
                 __m128i prod = _mm_mul_epi64_custom(r_vec, b_vec);
                 c_vec = _mm_add_epi64(c_vec, prod);
                 
-                _mm_storeu_si128(reinterpret_cast<__m128i*>(&C[i * N + j]), c_vec);
+                _mm_store_si128(reinterpret_cast<__m128i*>(&C[i * N + j]), c_vec);
             }
         }
     }

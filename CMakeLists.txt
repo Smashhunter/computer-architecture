@@ -6,7 +6,6 @@ set(CMAKE_CUDA_STANDARD 17)
 
 # Настройки архитектуры для GTX 1660 Ti (Turing sm_75)
 set(CMAKE_CUDA_ARCHITECTURES 75)
-set(MATRIX_SIZE 4096 CACHE STRING "Size of square matrix in every bench")
 
 
 # Флаги компиляции CPU для SSE4.1
@@ -17,11 +16,10 @@ else()
 endif()
 
 # Создаем исполнимый файл CUDA
-add_executable(main main.cpp matrix_cuda.cu cpu.hpp)
-
-target_compile_definitions(main PRIVATE
-    N=MATRIX_SIZE
-)
+add_executable(main_cuda main_cuda.cpp matrix_cuda.cu)
+add_executable(main_ikj main_ikj.cpp cpu.hpp)
+add_executable(main_naive main_naive.cpp cpu.hpp)
+add_executable(main_sse main_sse.cpp cpu.hpp)
 
 # Создаем исполнимый файл CPU
 # add_executable(cpu_bench main_cpu.cpp)

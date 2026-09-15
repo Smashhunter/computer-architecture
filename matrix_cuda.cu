@@ -1,7 +1,7 @@
 #include <cuda_runtime.h>
 #include <iostream>
 
-// #define N 4096
+#define N 4096
 #define BLOCK_SIZE 16
 
 __global__ void matrixMulCUDA(const int64_t* A, const int64_t* B, int64_t* C) {
