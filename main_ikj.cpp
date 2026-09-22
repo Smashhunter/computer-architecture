@@ -22,5 +22,11 @@ int main() {
     double ms = std::chrono::duration<double, std::milli>(end - start).count();
 
     std::cout << "RESULT: " << ms << std::endl;
+    std::cout << std::endl;
+    print_result(A.data());
+    std::cout << std::endl;
+    print_result(B.data());
+    std::cout << std::endl;
+    print_result(C.data());
     return 0;
 }

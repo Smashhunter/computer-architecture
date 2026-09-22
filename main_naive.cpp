@@ -16,8 +16,16 @@ int main() {
     scalar_naive(A.data(), B.data(), C.data());
     
     auto end = std::chrono::high_resolution_clock::now();
-    double ms = std::chrono::duration<double, std::milli>(end - start).count();
+    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 
     std::cout << "RESULT: " << ms << std::endl;
+
+    std::cout << std::endl;
+    print_result(A.data());
+    std::cout << std::endl;
+    print_result(B.data());
+    std::cout << std::endl;
+    print_result(C.data());
+    std::cout << std::endl;
     return 0;
 }

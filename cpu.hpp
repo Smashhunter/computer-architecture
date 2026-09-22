@@ -5,6 +5,16 @@
 
 constexpr int N = 4096;
 
+void print_result(const int64_t* C){
+    int n = 10;
+    while (n--)
+    {
+        std::cout << *C << ' ';
+        C++;
+    }
+    
+}
+
 // 1. Наивный скалярный вариант (i-j-k)
 void scalar_naive(const int64_t* A, const int64_t* B, int64_t* C) {
     for (int i = 0; i < N; ++i) {

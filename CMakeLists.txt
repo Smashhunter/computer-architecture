@@ -21,5 +21,3 @@ add_executable(main_ikj main_ikj.cpp cpu.hpp)
 add_executable(main_naive main_naive.cpp cpu.hpp)
 add_executable(main_sse main_sse.cpp cpu.hpp)
 
-# Создаем исполнимый файл CPU
-# add_executable(cpu_bench main_cpu.cpp)

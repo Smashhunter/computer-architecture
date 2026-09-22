@@ -26,26 +26,53 @@ __global__ void matrixMulCUDA(const int64_t* A, const int64_t* B, int64_t* C) {
 }
 
 extern "C" void run_cuda_kernel(const int64_t* h_A, const int64_t* h_B, int64_t* h_C) {
+    int deviceCount = 0;
+    cudaGetDeviceCount(&deviceCount);
+
+    if (deviceCount == 0) {
+        std::cerr << "КРИТИЧЕСКАЯ ОШИБКА: Видеокарта NVIDIA не найдена системой!" << std::endl;
+        return;
+    }
+
     size_t bytes = N * N * sizeof(int64_t);
     int64_t *d_A, *d_B, *d_C;
 
     // Аллоцируем память на Device (видеокарте)
-    cudaMalloc(&d_A, bytes);
-    cudaMalloc(&d_B, bytes);
-    cudaMalloc(&d_C, bytes);
+    cudaError_t err;
+    err = cudaMalloc((void**)&d_A, bytes);
+    if (err != cudaSuccess) std::cerr << "cudaMalloc d_A error: " << cudaGetErrorString(err) << std::endl;
+    
+    err = cudaMalloc((void**)&d_B, bytes);
+    if (err != cudaSuccess) std::cerr << "cudaMalloc d_B error: " << cudaGetErrorString(err) << std::endl;
+    
+    err = cudaMalloc((void**)&d_C, bytes);
+    if (err != cudaSuccess) std::cerr << "cudaMalloc d_C error: " << cudaGetErrorString(err) << std::endl;
 
     // Единожды копируем с оперативной памяти в выделенную память видеокарты
     cudaMemcpy(d_A, h_A, bytes, cudaMemcpyHostToDevice);
     cudaMemcpy(d_B, h_B, bytes, cudaMemcpyHostToDevice);
+    cudaMemset(d_C, 0, bytes);
 
     dim3 threadsPerBlock(BLOCK_SIZE, BLOCK_SIZE);
     dim3 blocksPerGrid(N / BLOCK_SIZE, N / BLOCK_SIZE);
 
     // Запускаем вычисления для каждого блока 
     matrixMulCUDA<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C);
-    cudaDeviceSynchronize(); // Ждем пока кадый поток закончит счёт
 
-    cudaMemcpy(h_C, d_C, bytes, cudaMemcpyDeviceToHost); // Загружаем в результат в ОЗУ
+    err = cudaGetLastError();
+    if (err != cudaSuccess) {
+        std::cerr << "Kernel launch error: " << cudaGetErrorString(err) << std::endl;
+    }
+
+    err = cudaDeviceSynchronize(); // Ждем пока кадый поток закончит счёт
+    if (err != cudaSuccess) {
+        std::cerr << "cudaDeviceSynchronize error: " << cudaGetErrorString(err) << std::endl;
+    }
+
+    err = cudaMemcpy(h_C, d_C, bytes, cudaMemcpyDeviceToHost); // Загружаем в результат в ОЗУ
+    if (err != cudaSuccess) {
+        std::cerr << "cudaMemcpy D2H error: " << cudaGetErrorString(err) << std::endl;
+    }
 
     cudaFree(d_A);
     cudaFree(d_B);

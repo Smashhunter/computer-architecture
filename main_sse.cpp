@@ -47,6 +47,13 @@ int main() {
 
     std::cout << "RESULT: " << ms << std::endl;
 
+    std::cout << std::endl;
+    print_result(A);
+    std::cout << std::endl;
+    print_result(B);
+    std::cout << std::endl;
+    print_result(C);
+
     // Освобождаем выровненную память
     free_aligned(A);
     free_aligned(B);
