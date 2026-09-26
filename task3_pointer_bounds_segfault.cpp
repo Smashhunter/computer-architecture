@@ -1,6 +1,6 @@
 #include <iostream>
 
 int main(){
-    std::cout << "Hello world!\n";
-    return 0;
+    int* a = nullptr;
+    *a =  10; // Доступ к ячейке памяти 0x0 запрещён.
 }

@@ -32,7 +32,7 @@ target_compile_options(2_array_bounds_corruption PRIVATE ${FLAGS_DEBUG_NO_PROTEC
 
 # 2.2 Ошибка доступа к памяти (Access Violation / Segfault)
 add_executable(2_array_bounds_segfault task2_array_bounds_segfault.cpp)
-target_compile_options(2_array_bounds_segfault PRIVATE ${FLAGS_DEBUG_NO_PROTECT})
+# target_compile_options(2_array_bounds_segfault PRIVATE ${FLAGS_DEBUG_NO_PROTECT})
 
 
 # ==============================================================================

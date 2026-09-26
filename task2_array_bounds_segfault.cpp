@@ -1,6 +1,6 @@
 #include <iostream>
 
 int main(){
-    std::cout << "Hello world!\n";
-    return 0;
+    int a[10];
+    a[100000] = 22; // Segfault error
 }
